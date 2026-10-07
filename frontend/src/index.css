@@ -1,0 +1,236 @@
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  --dm-maroon: #7a1018;
+  --dm-maroon-dark: #560a0f;
+  --dm-maroon-deep: #3d0508;
+
+  --dm-gold: #d4af37;
+  --dm-gold-dark: #a98216;
+  --dm-gold-light: #f8edc7;
+  --dm-gold-border: #d8bd62;
+  --dm-gold-bright: #f5d76e;
+
+  --dm-cream: #fffaf0;
+  --dm-cream-warm: #fdf3dc;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--dm-cream);
+  color: #333;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Typography */
+.font-cinzel {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.text-maroon {
+  color: var(--dm-maroon) !important;
+}
+
+.text-maroon-dark {
+  color: var(--dm-maroon-dark) !important;
+}
+
+.text-gold {
+  color: var(--dm-gold) !important;
+}
+
+.text-gold-bright {
+  color: var(--dm-gold-bright) !important;
+}
+
+/* Backgrounds */
+.bg-cream {
+  background: var(--dm-cream) !important;
+}
+
+.bg-cream-warm {
+  background: var(--dm-cream-warm) !important;
+}
+
+.bg-maroon-dark {
+  background: var(--dm-maroon-dark) !important;
+}
+
+.bg-maroon-gradient {
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(212, 175, 55, 0.15),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      var(--dm-maroon-deep),
+      var(--dm-maroon-dark),
+      var(--dm-maroon)
+    ) !important;
+}
+
+.border-gold {
+  border-color: var(--dm-gold-border) !important;
+}
+
+/* Buttons */
+.btn-gold {
+  background: linear-gradient(
+    135deg,
+    var(--dm-gold),
+    var(--dm-gold-bright)
+  ) !important;
+  color: var(--dm-maroon-deep) !important;
+  border: 1px solid var(--dm-gold) !important;
+  font-weight: 700;
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+}
+
+.btn-maroon {
+  background: var(--dm-maroon) !important;
+  color: white !important;
+  border: 1px solid var(--dm-gold) !important;
+  font-weight: 700;
+}
+
+.btn-maroon:hover {
+  background: var(--dm-maroon-dark) !important;
+}
+
+.btn-outline-gold {
+  color: var(--dm-gold) !important;
+  border: 1px solid var(--dm-gold) !important;
+}
+
+.btn-outline-gold:hover {
+  background: var(--dm-gold) !important;
+  color: var(--dm-maroon-deep) !important;
+}
+
+/* Hero image */
+.durga-frame-wrapper {
+  max-width: 420px;
+  padding: 10px;
+  border: 2px solid var(--dm-gold);
+  border-radius: 30px;
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.durga-frame-inner {
+  overflow: hidden;
+  min-height: 420px;
+  border-radius: 22px;
+  border: 1px solid var(--dm-gold-border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.durga-hero-img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+.durga-placeholder {
+  min-height: 420px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Access cards */
+.access-card {
+  height: 100%;
+  padding: 30px;
+  border-radius: 24px;
+  background: white;
+  border: 1px solid var(--dm-gold-border);
+  box-shadow: 0 10px 30px rgba(86, 10, 15, 0.08);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.access-card:hover {
+  transform: translateY(-4px);
+  transition: 0.25s ease;
+}
+
+/* Financial metric cards */
+.metric-card {
+  height: 100%;
+  padding: 25px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid var(--dm-gold-border);
+  box-shadow: 0 8px 25px rgba(86, 10, 15, 0.07);
+}
+
+.metric-value {
+  color: var(--dm-maroon);
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+/* Privacy */
+.privacy-box {
+  padding: 30px;
+  border-radius: 20px;
+  background: var(--dm-gold-light);
+  border: 1px solid var(--dm-gold-border);
+}
+
+/* Decorative divider */
+.festive-divider {
+  margin: 10px auto 15px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .durga-frame-inner,
+  .durga-hero-img,
+  .durga-placeholder {
+    min-height: 320px;
+    height: 320px;
+  }
+
+  .access-card {
+    padding: 22px;
+  }
+
+  .metric-value {
+    font-size: 1.6rem;
+  }
+}
