@@ -76,8 +76,10 @@ function AdminDashboard() {
         setLoading(true);
         setError('');
 
+        const API_BASE = import.meta.env.VITE_API_URL;
+
         const response = await fetch(
-          'http://localhost:5000/api/dashboard/summary',
+          `${API_BASE}/api/dashboard/summary`,
           {
             method: 'GET',
             headers: {

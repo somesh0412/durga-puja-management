@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 
 function AdminLogin() {
   const navigate = useNavigate();
+  const API_BASE = import.meta.env.VITE_API_URL;
 
   const [mode, setMode] = useState('signin');
 
@@ -41,7 +42,7 @@ function AdminLogin() {
     setError('');
 
     const response = await fetch(
-      'http://localhost:5000/api/admin/login',
+      `${API_BASE}/api/admin/login`,
       {
         method: 'POST',
         headers: {
@@ -95,7 +96,7 @@ function AdminLogin() {
     setError('');
 
     const response = await fetch(
-      'http://localhost:5000/api/admin/signup',
+      `${API_BASE}/api/admin/signup`,
       {
         method: 'POST',
         headers: {
