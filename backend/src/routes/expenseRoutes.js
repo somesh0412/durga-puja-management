@@ -3,6 +3,7 @@ const express = require("express");
 const {
   addExpense,
   getExpenses,
+  uploadExpenseReceipt,
 } = require("../controllers/expenseController");
 
 const authMiddleware = require("../middleware/authMiddleware");
@@ -18,5 +19,12 @@ router.post(
 );
 
 router.get("/", authMiddleware, getExpenses);
+
+router.post(
+  "/:id/receipt",
+  authMiddleware,
+  upload.single("billImage"),
+  uploadExpenseReceipt
+);
 
 module.exports = router;

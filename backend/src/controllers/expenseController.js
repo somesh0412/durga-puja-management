@@ -101,7 +101,51 @@ const getExpenses = async (req, res) => {
     });
   }
 };
+
+const uploadExpenseReceipt = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate receipt file
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Please select a receipt image to upload",
+      });
+    }
+
+    // Find the existing expense
+    const expense = await Expense.findById(id);
+
+    if (!expense) {
+      return res.status(404).json({
+        message: "Expense not found",
+      });
+    }
+
+    // Upload receipt to Cloudinary
+    const uploadResult = await uploadToCloudinary(
+      req.file.buffer
+    );
+
+    // Update only the receipt URL
+    expense.billImageUrl = uploadResult.secure_url;
+    await expense.save();
+
+    return res.status(200).json({
+      message: "Receipt uploaded successfully",
+      expense,
+    });
+  } catch (error) {
+    console.error("Upload expense receipt error:", error);
+
+    return res.status(500).json({
+      message: "Failed to upload receipt",
+    });
+  }
+};
+
 module.exports = {
   addExpense,
   getExpenses,
+  uploadExpenseReceipt,
 };

@@ -10,6 +10,8 @@ function ExpenseReport() {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [uploadingExpenseId, setUploadingExpenseId] = useState(null);
+  const [receiptMessage, setReceiptMessage] = useState('');
   const [pdfError, setPdfError] = useState('');
 
   useEffect(() => {
@@ -56,6 +58,66 @@ function ExpenseReport() {
 
     fetchExpenses();
   }, [navigate]);
+  
+const handleReceiptUpload = async (expenseId, file) => {
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    setReceiptMessage('Please select an image file.');
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    setReceiptMessage('Image size must be 5 MB or less.');
+    return;
+  }
+
+  const token = localStorage.getItem('adminToken');
+
+  if (!token) {
+    navigate('/admin/login');
+    return;
+  }
+
+  try {
+    setUploadingExpenseId(expenseId);
+    setReceiptMessage('');
+
+    const formData = new FormData();
+    formData.append('billImage', file);
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/expenses/${expenseId}/receipt`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Receipt upload failed.');
+    }
+
+    setExpenses((currentExpenses) =>
+      currentExpenses.map((expense) =>
+        expense._id === expenseId
+          ? { ...expense, billImageUrl: data.expense.billImageUrl }
+          : expense
+      )
+    );
+
+    setReceiptMessage('Receipt uploaded successfully.');
+  } catch (err) {
+    setReceiptMessage(err.message || 'Receipt upload failed.');
+  } finally {
+    setUploadingExpenseId(null);
+  }
+};
 
   const totalExpenses = expenses.reduce(
     (sum, e) => sum + (Number(e.amount) || 0),
@@ -278,7 +340,14 @@ function ExpenseReport() {
                       </div>
                     </div>
                   </div>
-
+                    {receiptMessage && (
+                      <div
+                        className="alert alert-info rounded-3 small mb-4"
+                        role="status"
+                      >
+                        {receiptMessage}
+                      </div>
+                    )}
                   {error && (
                     <div className="alert alert-warning border-gold rounded-3 small mb-4 d-flex align-items-center gap-2">
                       <span>⚠️</span>
@@ -371,22 +440,53 @@ function ExpenseReport() {
                                     >
                                       View Receipt
                                     </button>
-                                  ) : (
-                                    <span
-                                      className="badge bg-light text-muted border py-1 px-2 fw-normal"
-                                      style={{ fontSize: '0.75rem' }}
-                                    >
-                                      Receipt not available
-                                    </span>
-                                  )}
-                                </td>
-                              </tr>
-                            );
-                          })
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
+                                  
+) : (
+  <div className="d-flex flex-column align-items-end gap-2">
+    <span
+      className="badge bg-light text-muted border py-1 px-2 fw-normal"
+      style={{ fontSize: '0.75rem' }}
+    >
+      Receipt not available
+    </span>
+
+    <label
+      className="btn btn-sm fw-semibold mb-0"
+      style={{
+        fontSize: '0.8rem',
+        color: '#7a1018',
+        backgroundColor: '#fffaf0',
+        border: '1px solid #d4af37',
+        cursor: uploadingExpenseId === item._id ? 'wait' : 'pointer',
+      }}
+    >
+      {uploadingExpenseId === item._id
+        ? 'Uploading...'
+        : 'Upload Receipt'}
+
+      <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        hidden
+        disabled={uploadingExpenseId !== null}
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (file) handleReceiptUpload(item._id, file);
+          event.target.value = '';
+        }}
+      />
+    </label>
+  </div>
+)}
+                                  
+                </td>
+              </tr>
+            );
+          })
+      )}
+    </tbody>
+  </table>
+</div>
 
                   {/* Actions */}
                   <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
